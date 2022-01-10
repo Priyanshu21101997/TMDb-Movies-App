@@ -1,10 +1,8 @@
 package com.example.showcaseapp.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.domainapp.database.MoviesDao
 import com.example.domainapp.database.MoviesDatabase
 import com.example.domainapp.database.MoviesEntity
 //import com.example.finalProject.di.ApiService
@@ -12,8 +10,10 @@ import com.example.domainapp.models.Movies
 import com.example.domainapp.models.Results
 import com.example.domainapp.network.ApiService
 //import com.example.domainapp.network.RetroInstance
+//import com.example.domainapp.network.RetroInstance
 import com.example.domainapp.repository.MoviesRepository
 import com.example.showcaseapp.MyApplication
+//import com.example.showcaseapp.MyApplication
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
@@ -26,7 +26,7 @@ import retrofit2.Call
 import java.util.*
 import javax.inject.Inject
 
-class ViewModel(application: Application): AndroidViewModel(application) {
+class ViewModel public constructor(application: Application): AndroidViewModel(application) {
 
     private val TAG = "ViewModel"
     var topRatedMoviesEntityLiveData: MutableLiveData<List<Results>>
@@ -38,17 +38,18 @@ class ViewModel(application: Application): AndroidViewModel(application) {
     @Inject
     lateinit var apiService: ApiService
 
-//    @Inject
-//    lateinit var moviesDao:MoviesDao
+    @Inject
+    lateinit var moviesDao: MoviesDao
 
-    private var repository: com.example.domainapp.repository.MoviesRepository
+    @Inject
+    lateinit var repository: MoviesRepository
 
     init {
         (application as MyApplication).getApiComponent().inject(this)
         topRatedMoviesEntityLiveData = MutableLiveData<List<Results>>()
         popularMoviesEntityLiveData = MutableLiveData<List<Results>>()
-        val moviesDao = MoviesDatabase.getDatabase(application).moviesDao()
-        repository = MoviesRepository(moviesDao)
+//        val moviesDao = MoviesDatabase.getDatabase(application).moviesDao()
+//        repository = MoviesRepository(moviesDao)
         readFavouriteMoviesEntity = repository.readFavouriteMoviesEntity
     }
 
@@ -56,10 +57,10 @@ class ViewModel(application: Application): AndroidViewModel(application) {
 //        val apiService = RetroInstance.getRetroClient()?.create(
 //            com.example.domainapp.network.ApiService::class.java)
         val getTopRatedMoviesEntity: Observable<Movies> =
-            apiService.getTopRatedMovies("e807e46843c45d1ac8631a914207e53e")
+            apiService!!.getTopRatedMovies("e807e46843c45d1ac8631a914207e53e")
 
         val getPopularMoviesEntity: Observable<Movies> =
-            apiService.getPopularMovies("e807e46843c45d1ac8631a914207e53e")
+            apiService!!.getPopularMovies("e807e46843c45d1ac8631a914207e53e")
 
 //        getJsonResponse(getTopRatedMoviesEntity,0)
 //        getJsonResponse(getPopularMoviesEntity,1)
@@ -81,6 +82,7 @@ class ViewModel(application: Application): AndroidViewModel(application) {
                 }
 
                 override fun onNext(t: List<Results>) {
+
                     if(identifier == 0){
                         topRatedMoviesEntityLiveData.value = t
                     }
@@ -157,3 +159,5 @@ class ViewModel(application: Application): AndroidViewModel(application) {
 
     }
 }
+
+

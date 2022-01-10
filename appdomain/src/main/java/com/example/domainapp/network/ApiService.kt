@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-public interface ApiService {
+ interface ApiService {
 
     @GET("movie/top_rated")
     fun getTopRatedMovies(@Query("api_key") api_key:String): Observable<Movies>

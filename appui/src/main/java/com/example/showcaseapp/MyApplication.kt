@@ -1,21 +1,21 @@
 package com.example.showcaseapp
 
 import android.app.Application
-import com.example.domainapp.di.DaggerapiComponent
-import com.example.domainapp.di.apiComponent
-import com.example.domainapp.di.apiModule
+import com.example.di.DaggerAppComponent
+import com.example.di.AppComponent
+import com.example.di.AppModule
 
 class MyApplication:Application() {
 
-    private lateinit var apiComponent:apiComponent
+    private lateinit var AppComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
 
-        apiComponent = DaggerapiComponent.builder().apiModule(apiModule()).build()
+        AppComponent = DaggerAppComponent.builder().appModule(AppModule(this)).build()
     }
 
-    fun getApiComponent(): apiComponent {
-        return apiComponent
+    fun getApiComponent(): AppComponent {
+        return AppComponent
     }
 }

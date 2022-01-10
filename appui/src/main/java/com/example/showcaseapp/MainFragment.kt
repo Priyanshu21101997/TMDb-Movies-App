@@ -38,9 +38,6 @@ class MainFragment : BrowseSupportFragment() {
     private lateinit var rowsAdapter:ArrayObjectAdapter
     private lateinit var mViewModel: ViewModel
     private var favouritePosition = -10
-//
-//    @Inject
-//    lateinit var apiService: ApiService
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -51,15 +48,11 @@ class MainFragment : BrowseSupportFragment() {
 
 
         mViewModel = ViewModelProvider(this)[ViewModel::class.java]
-//        mViewModel.makeApiCall()
-//
-//
-//
+        mViewModel.makeApiCall()
+
         loadRows()
-//
+
         setupEventListeners()
-//
-//
     }
 //
     override fun onDestroy() {
@@ -97,9 +90,6 @@ class MainFragment : BrowseSupportFragment() {
             startEntranceTransition()
         }, 500)
 
-//    createRows()
-//    createFavMovieRow()
-//    startEntranceTransition()
 
 
     }

@@ -13,7 +13,7 @@ class DetailsDescriptionPresenter : AbstractDetailsDescriptionPresenter() {
         val movie = item as Results
 
         viewHolder.title.text = movie.title
-        viewHolder.subtitle.text = movie.posterPath
-        viewHolder.body.text = movie.posterPath
+        viewHolder.subtitle.text = movie.releaseDate
+        viewHolder.body.text = movie.overview
     }
 }
