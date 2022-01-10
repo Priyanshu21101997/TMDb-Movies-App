@@ -20,7 +20,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Scratch">
         <activity
-            android:name="com.example.showcaseapp.MainActivity"
+            android:name="com.example.showcaseapp.ui.main.MainActivity"
             android:banner="@drawable/app_icon_your_company"
             android:exported="true"
             android:icon="@drawable/app_icon_your_company"
@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.showcaseapp.DetailsActivity"
+            android:name="com.example.showcaseapp.ui.details.DetailsActivity"
             android:exported="false" />
     </application>
 

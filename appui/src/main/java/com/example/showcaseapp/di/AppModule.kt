@@ -1,4 +1,4 @@
-package com.example.di
+package com.example.showcaseapp.di
 
 import com.example.domainapp.database.MoviesDao
 import com.example.domainapp.database.MoviesDatabase

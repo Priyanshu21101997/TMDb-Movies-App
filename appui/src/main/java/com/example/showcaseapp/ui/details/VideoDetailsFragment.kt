@@ -1,4 +1,4 @@
-package com.example.showcaseapp
+package com.example.showcaseapp.ui.details
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -7,7 +7,6 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.leanback.app.DetailsSupportFragment
@@ -19,8 +18,11 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.domainapp.database.MoviesEntity
 import com.example.domainapp.models.Results
+import com.example.showcaseapp.R
 import com.example.showcaseapp.viewmodel.ViewModel
 import com.example.showcaseapp.presenters.DetailsDescriptionPresenter
+import com.example.showcaseapp.ui.main.MainActivity
+import com.example.showcaseapp.utils.Constants
 
 
 /**
@@ -29,15 +31,16 @@ import com.example.showcaseapp.presenters.DetailsDescriptionPresenter
  */
 class VideoDetailsFragment : DetailsSupportFragment() {
 
-    private lateinit var mSelectedMovie: Results
-
     private lateinit var mDetailsBackground: DetailsSupportFragmentBackgroundController
     private lateinit var mPresenterSelector: ClassPresenterSelector
     private lateinit var mAdapter: ArrayObjectAdapter
     private lateinit var sharedPreferences: SharedPreferences
-    
+    private lateinit var mSelectedMovie: Results
+    private lateinit var mViewModel: ViewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
 
         sharedPreferences = this.requireActivity().getSharedPreferences(PREF_NAME, MODE)
@@ -45,32 +48,31 @@ class VideoDetailsFragment : DetailsSupportFragment() {
         mDetailsBackground = DetailsSupportFragmentBackgroundController(this)
 
         mSelectedMovie =requireActivity().intent.getSerializableExtra(DetailsActivity.MOVIE) as Results
+
+        mViewModel = ViewModelProvider(this)[ViewModel::class.java]
+
         if (mSelectedMovie != null) {
-            Log.d("Yeh","$mSelectedMovie")
             mPresenterSelector = ClassPresenterSelector()
             mAdapter = ArrayObjectAdapter(mPresenterSelector)
             setupDetailsOverviewRow()
             setupDetailsOverviewRowPresenter()
-
             adapter = mAdapter
-
             initializeBackground(mSelectedMovie)
-            Log.d("Helloworld","hi")
 
-//            onItemViewClickedListener = ItemViewClickedListener()
         } else {
             val intent = Intent(requireActivity(), MainActivity::class.java)
             startActivity(intent)
         }
     }
-//
+
     private fun initializeBackground(movie: Results?) {
+
         mDetailsBackground.enableParallax()
         Glide.with(requireActivity())
             .asBitmap()
             .centerCrop()
             .error(R.drawable.default_background)
-            .load("https://image.tmdb.org/t/p/w400/"+movie?.posterPath)
+            .load(Constants.API_IMAGE_URI_400+movie?.posterPath)
             .into<SimpleTarget<Bitmap>>(object : SimpleTarget<Bitmap>() {
                 override fun onResourceReady(
                     bitmap: Bitmap,
@@ -81,14 +83,15 @@ class VideoDetailsFragment : DetailsSupportFragment() {
                 }
             })
     }
-//
+
     private fun setupDetailsOverviewRow() {
+
     val row = DetailsOverviewRow(mSelectedMovie)
     row.imageDrawable = ContextCompat.getDrawable(requireActivity(), R.drawable.default_background)
     val width = convertDpToPixel(requireActivity(), DETAIL_THUMB_WIDTH)
     val height = convertDpToPixel(requireActivity(), DETAIL_THUMB_HEIGHT)
     Glide.with(requireActivity())
-        .load("https://image.tmdb.org/t/p/w400/" + mSelectedMovie?.posterPath)
+        .load(Constants.API_IMAGE_URI_400 + mSelectedMovie?.posterPath)
         .centerCrop()
         .error(R.drawable.default_background)
         .into<SimpleTarget<Drawable>>(object : SimpleTarget<Drawable>(width, height) {
@@ -126,7 +129,6 @@ class VideoDetailsFragment : DetailsSupportFragment() {
         )
     )
     row.actionsAdapter = actionAdapter
-
     mAdapter.add(row)
 
 }
@@ -141,7 +143,6 @@ private fun setupDetailsOverviewRowPresenter() {
 
     detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
         if (action.id == ADD_TO_FAVOURITES) {
-            var mViewModel = ViewModelProvider(this)[ViewModel::class.java]
             var isPresent = sharedPreferences.getInt(mSelectedMovie.id.toString(),0)
             if(isPresent == 0) {
                 mViewModel.addMovieToFavourites(
@@ -153,7 +154,7 @@ private fun setupDetailsOverviewRowPresenter() {
                 sharedPreferences.edit().putInt(mSelectedMovie.id.toString(), 1).apply()
                 Toast.makeText(
                     requireActivity(),
-                    "${mSelectedMovie?.title} successfully added to favourites}",
+                    "${mSelectedMovie?.title} successfully added to favourites",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -163,12 +164,9 @@ private fun setupDetailsOverviewRowPresenter() {
         } else
             Toast.makeText(requireActivity(), action.toString(), Toast.LENGTH_SHORT).show()
 }
-
         mPresenterSelector.addClassPresenter(DetailsOverviewRow::class.java, detailsPresenter)
-//
 }
-    //
-//
+
     private fun convertDpToPixel(context: Context, dp: Int): Int {
         val density = context.applicationContext.resources.displayMetrics.density
         return Math.round(dp.toFloat() * density)
@@ -184,7 +182,6 @@ private fun setupDetailsOverviewRowPresenter() {
         private val DETAIL_THUMB_WIDTH = 274
         private val DETAIL_THUMB_HEIGHT = 274
 
-        private val NUM_COLS = 20
         private var MODE = MODE_PRIVATE
         private val PREF_NAME = "final_project"
 

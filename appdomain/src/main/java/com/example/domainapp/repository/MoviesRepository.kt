@@ -7,7 +7,6 @@ import javax.inject.Inject
 
 class MoviesRepository @Inject constructor ( val moviesDao: MoviesDao) {
 
-
     val readFavouriteMoviesEntity : LiveData<List<MoviesEntity>> = moviesDao.readFavouriteMovies()
 
     suspend fun addMovieToFavourites(movie: MoviesEntity){

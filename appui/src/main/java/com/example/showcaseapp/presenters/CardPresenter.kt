@@ -7,6 +7,7 @@ import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.example.showcaseapp.R
 import com.example.domainapp.models.Results
+import com.example.showcaseapp.utils.Constants
 import kotlin.properties.Delegates
 
 class CardPresenter:Presenter() {
@@ -40,13 +41,12 @@ class CardPresenter:Presenter() {
         val cardView = viewHolder.view as ImageCardView
 
         cardView.titleText = movie.title
-            cardView.contentText = movie.voteAverage.toString()
+        cardView.contentText = movie.voteAverage.toString()
         cardView.setMainImageDimensions(313, 176)
-            Glide.with(viewHolder.view.context)
-                .load("https://image.tmdb.org/t/p/w400/"+movie.posterPath)
-                .centerCrop()
-//                .error(mDefaultCardImage)
-                .into(cardView.mainImageView)
+        Glide.with(viewHolder.view.context)
+            .load(Constants.API_IMAGE_URI_400+movie.posterPath)
+            .centerCrop()
+            .into(cardView.mainImageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder?) {

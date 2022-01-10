@@ -1,9 +1,9 @@
 package com.example.showcaseapp
 
 import android.app.Application
-import com.example.di.DaggerAppComponent
-import com.example.di.AppComponent
-import com.example.di.AppModule
+import com.example.showcaseapp.di.AppComponent
+import com.example.showcaseapp.di.AppModule
+import com.example.showcaseapp.di.DaggerAppComponent
 
 class MyApplication:Application() {
 

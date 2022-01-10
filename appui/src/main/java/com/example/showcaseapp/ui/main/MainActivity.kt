@@ -1,7 +1,8 @@
-package com.example.showcaseapp
+package com.example.showcaseapp.ui.main
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
+import com.example.showcaseapp.R
 
 /**
  * Loads [MainFragment].

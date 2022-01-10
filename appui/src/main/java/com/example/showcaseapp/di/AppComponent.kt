@@ -1,4 +1,4 @@
-package com.example.di
+package com.example.showcaseapp.di
 
 import com.example.showcaseapp.viewmodel.ViewModel
 import dagger.Component
